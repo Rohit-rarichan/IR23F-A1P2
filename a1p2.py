@@ -1,5 +1,6 @@
 from pathlib import Path
 
+
 def direc_list(myPath):  #list_dir contains ['L', '/home/algol/ics32/lectures']
     for currentpath in myPath.iterdir():
         print(currentpath)
@@ -42,6 +43,13 @@ def files_search_recursive(myPath, filename):  #searching for files by file name
         elif currentpath.is_dir():
             files_search_recursive(currentpath, filename)
 
+def create_file(path_init):
+    file = Path(path_init)
+    my_file = file.open("w")
+    my_file.close()
+
+
+
 
 def main(Command):   #main function
     list_dir = Command.split()
@@ -60,6 +68,10 @@ def main(Command):   #main function
         elif list_dir[2] == '-e':
             ext = list_dir[3]
             search_by_extension(myPath, ext)
+        elif list_dir[2] == '-n':
+            Path_init = list_dir[1] + "/" + list_dir[3] + ".dsu"
+            create_file(Path_init)
+        
     elif len(list_dir) == 5:
         if list_dir[2] == '-r' and list_dir[3] == '-s':
             filename = list_dir[4]
@@ -74,6 +86,7 @@ if __name__ == "__main__":
         Command = input("L to list the contents of the user specified directory (Q to quit)")
         if Command == 'Q':
             break
-        elif Command.startswith('L'):
+        elif Command.startswith('L') or Command.startswith('C') or Command.startswith('D') or Command.startswith('R'):
             main(Command)
+        
 
