@@ -1,11 +1,17 @@
+# a1.py
+
+# Starter code for assignment 1 in ICS 32 Programming with Software Libraries in Python
+
+# Replace the following placeholders with your information.
+
+# Rohit George Rarichan 
+# raricha@uci.edu
+# 36126645
 from pathlib import Path
-
-
 
 def direc_list(myPath):  #list_dir contains ['L', '/home/algol/ics32/lectures']
     for currentpath in myPath.iterdir():
         print(currentpath)
-
 
 def recursive_list(myPath):  #searching for files inside a directory
     for currentpath in myPath.iterdir(): 
@@ -50,7 +56,10 @@ def create_file(path_init):    #creating a file
     my_file.close()
 
 def delete_file(myPath):      #deleting a file
-    myPath.unlink()
+    try:
+        myPath.unlink()
+    except FileNotFoundError:
+        print(f"File not found: {myPath}")
 
 def read_file(myPath):        #reading the contents of a file 
     try:
@@ -65,11 +74,8 @@ def read_file(myPath):        #reading the contents of a file
     except Exception as e:
         print(f"Error reading file: {e}")
 
-
-
-
 def main(Command):   #main function
-    list_dir = Command.split()
+    list_dir = Command.split(maxsplit = 1)
     myPath = Path(list_dir[1])
     if len(list_dir) == 2:
         if Command.startswith('L'):
@@ -107,7 +113,7 @@ def main(Command):   #main function
 
 if __name__ == "__main__":
     while True:
-        Command = input("L to list the contents of the user specified directory (Q to quit)")
+        Command = input("L to list the contents C to create a file D to delete a file R to read the contenst of a file (Q to quit)")
         if Command == 'Q':
             break
         elif Command.startswith('L') or Command.startswith('C') or Command.startswith('D') or Command.startswith('R'):
