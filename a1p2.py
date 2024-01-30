@@ -1,6 +1,7 @@
 from pathlib import Path
 
 
+
 def direc_list(myPath):  #list_dir contains ['L', '/home/algol/ics32/lectures']
     for currentpath in myPath.iterdir():
         print(currentpath)
@@ -43,10 +44,26 @@ def files_search_recursive(myPath, filename):  #searching for files by file name
         elif currentpath.is_dir():
             files_search_recursive(currentpath, filename)
 
-def create_file(path_init):
+def create_file(path_init):    #creating a file 
     file = Path(path_init)
     my_file = file.open("w")
     my_file.close()
+
+def delete_file(myPath):      #deleting a file
+    myPath.unlink()
+
+def read_file(myPath):        #reading the contents of a file 
+    try:
+        with myPath.open('r') as my_file:
+            data = my_file.read()
+            if not data:
+                print("EMPTY")
+            else:
+                print(data)
+    except FileNotFoundError:
+        print(f"File not found: {myPath}")
+    except Exception as e:
+        print(f"Error reading file: {e}")
 
 
 
@@ -55,7 +72,15 @@ def main(Command):   #main function
     list_dir = Command.split()
     myPath = Path(list_dir[1])
     if len(list_dir) == 2:
-        direc_list(myPath)
+        if Command.startswith('L'):
+            direc_list(myPath)
+        elif Command.startswith('D'):
+            myPath = Path(list_dir[1])
+            delete_file(myPath)
+        elif Command.startswith('R'):
+            if list_dir[1][-4:] == ".dsu":
+                myPath = Path(list_dir[1])
+                read_file(myPath)
     elif len(list_dir) == 3:
         if list_dir[2] == '-r':
             recursive_list(myPath)
@@ -68,10 +93,9 @@ def main(Command):   #main function
         elif list_dir[2] == '-e':
             ext = list_dir[3]
             search_by_extension(myPath, ext)
-        elif list_dir[2] == '-n':
-            Path_init = list_dir[1] + "/" + list_dir[3] + ".dsu"
-            create_file(Path_init)
-        
+        elif list_dir[2] == '-n' and Command.startswith('C'):
+            Path_init = myPath / (list_dir[3] + ".dsu")
+            create_file(Path_init)       
     elif len(list_dir) == 5:
         if list_dir[2] == '-r' and list_dir[3] == '-s':
             filename = list_dir[4]
